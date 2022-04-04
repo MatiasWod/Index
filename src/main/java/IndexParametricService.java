@@ -16,3 +16,4 @@ public interface IndexParametricService <T extends Comparable<? super T>>{
     // borra el key si lo hay, sino lo ignora.
     // decrece automáticamente de a chunks
     void delete(T key);
+}

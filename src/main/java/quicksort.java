@@ -2,30 +2,37 @@ public class quicksort {
 	int Max;
 	int Min;
 	int[] unsorted;
-	public void quicksort(int[] unsorted) {
-		this.unsorted=unsorted;
-		quicksort (unsorted, unsorted.length-1);
+
+	public void initialize(int[] unsorted) {
+		initialize(unsorted, unsorted.length-1);
 	}
 	
-	
-	public void quicksort(int[] unsorted, int cantElements) {
-		quicksortHelper (unsorted, 0, cantElements);
+
+	public void initialize(int[] unsorted, int cantElements) {
+		this.unsorted=unsorted;
+		quicksortHelper (this.unsorted, 0, cantElements);
 	}
 
 	int[] range(int leftKey, int rightKey, boolean leftIncluded, boolean rightIncluded){
-		
+		int i=indexOf(leftKey,0,unsorted.length-1);
+		leftKey=leftIncluded?i:(i+1);
+		rightKey=rightIncluded?rightKey:(rightKey-1);
+
+		int []range=new int[rightKey-leftKey];
+		for (int i=unsorted[leftKey],j=0;i<rightKey;i++,j++)
+			range[j]=unsorted[i];
+		return range;
 	}
 
 	public int getMin(){
-
+		return unsorted[0];
 	}
 
 	public int getMax(){
-
+		return unsorted[unsorted.length-1];
 	}
 
 	public void sortedPrint(){
-		quicksort(unsorted);
 		for (int i : unsorted) {
 			System.out.print(i + " ");
 		}
@@ -74,6 +81,21 @@ public class quicksort {
 		int auxi= unsorted[pos1];
 		unsorted[pos1]= unsorted[pos2];
 		unsorted[pos2]= auxi;
+	}
+
+	private int indexOf(int key,int index,int max){
+		if (index>max)
+			return max;
+		int mid=(index+(max))/2;
+		if (key==unsorted[mid]) {
+			return mid;
+		}
+		if (key<unsorted[mid]) {
+			if(mid==0)
+				return mid;
+			return indexOf(key,max,mid - 1);
+		}
+		return indexOf(key,mid+1,max);
 	}
 	
 	
