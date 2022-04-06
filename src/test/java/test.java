@@ -56,7 +56,7 @@ public class test {
                 System.out.println(Arrays.toString(rta));
                 rta= a.range(47, 45, false, false); // []
                 System.out.println(Arrays.toString(rta));
-                rta= a.range(120, 120, true, true); // []
+                rta= a.range(120        , 120, true, true); // []
                 System.out.println(Arrays.toString(rta));
                 rta= a.range(80, 80, false, false); // []
                 System.out.println(Arrays.toString(rta));
