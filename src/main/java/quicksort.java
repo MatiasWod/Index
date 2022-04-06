@@ -2,11 +2,12 @@ public class quicksort {
 	int Max;
 	int Min;
 	int[] unsorted;
+	int chunksize=10;
 
 	public void initialize(int[] unsorted) {
 		initialize(unsorted, unsorted.length-1);
 	}
-	
+
 
 	public void initialize(int[] unsorted, int cantElements) {
 		this.unsorted=unsorted;
@@ -14,13 +15,31 @@ public class quicksort {
 	}
 
 	int[] range(int leftKey, int rightKey, boolean leftIncluded, boolean rightIncluded){
-		int i=indexOf(leftKey,0,unsorted.length-1);
-		leftKey=leftIncluded?i:(i+1);
-		rightKey=rightIncluded?rightKey:(rightKey-1);
-
-		int []range=new int[rightKey-leftKey];
-		for (int i=unsorted[leftKey],j=0;i<rightKey;i++,j++)
-			range[j]=unsorted[i];
+		int i=binarySearch(leftKey,0,unsorted.length-1);
+		int []range=new int[chunksize];
+		int e=0;
+		if(leftIncluded){
+			int j=i;
+			while (j>=0 && unsorted[j]==leftKey){
+					checkChunk(range,e+1);
+					range[e++]=unsorted[j--];
+			}
+		}
+		else{
+			while(i<unsorted.length && unsorted[i]==leftKey){
+				i++;
+			}
+		}
+		while(i<unsorted.length && unsorted[i]!=rightKey){
+			checkChunk(range,e+1);
+			range[e++]=unsorted[i++];
+		}
+		if (rightIncluded){
+			while ( i<unsorted.length && unsorted[i]==rightKey){
+				checkChunk(range,e+1);
+				range[e++]=unsorted[i++];
+			}
+		}
 		return range;
 	}
 
@@ -40,29 +59,29 @@ public class quicksort {
 
 	private static void quicksortHelper (int[] unsorted, int leftPos, int rightPos) {
 		if (rightPos <= leftPos )
-			return; 
-		
+			return;
+
 		// tomamos como pivot el primero. Podria ser otro elemento
 		int pivotValue= unsorted[leftPos];
-		
+
 		// excluimos el pivot del cjto.
 		swap(unsorted, leftPos, rightPos);
 
 		// particionar el cjto sin el pivot
 		int pivotPosCalculated= partition(unsorted, leftPos, rightPos-1, pivotValue);
-		
-		
+
+
 		// el pivot en el lugar correcto
 		swap(unsorted, pivotPosCalculated, rightPos);
-		
-		
+
+
 		// salvo unsorted[middle] todo puede estar mal
 		// pero cada particion es autonoma
 		quicksortHelper(unsorted, leftPos, pivotPosCalculated - 1);
 		quicksortHelper(unsorted, pivotPosCalculated + 1, rightPos );
 
 	}
-	
+
 
 
 	static private int partition(int[] unsorted, int leftPos, int rightPos, int pivotValue) {
@@ -76,28 +95,32 @@ public class quicksort {
 		}
 		return leftPos;
 	}
-	
+
 	static private void swap(int[] unsorted, int pos1, int pos2) {
 		int auxi= unsorted[pos1];
 		unsorted[pos1]= unsorted[pos2];
 		unsorted[pos2]= auxi;
 	}
 
-	private int indexOf(int key,int index,int max){
-		if (index>max)
-			return max;
-		int mid=(index+(max))/2;
-		if (key==unsorted[mid]) {
+	private int binarySearch(int key,int izq,int der){
+		if(izq > der)
+			return unsorted.length-1;
+		int mid=(der + izq)/2;
+		if(key == unsorted[mid])
 			return mid;
+		if(key < unsorted[mid]) {
+			der = mid -1;
+			return binarySearch(key, izq, der);
 		}
-		if (key<unsorted[mid]) {
-			if(mid==0)
-				return mid;
-			return indexOf(key,max,mid - 1);
-		}
-		return indexOf(key,mid+1,max);
+		izq = mid + 1;
+		return binarySearch(key,izq,der);
 	}
-	
-	
 
+	private void checkChunk(int []array,int size){
+		if (size==chunksize){
+			int[]temp=new int[size+chunksize];
+			System.arraycopy(array,0,temp,0,size+chunksize);
+			array=temp;
+		}
+	}
 }
