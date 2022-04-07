@@ -17,7 +17,7 @@ public class quicksort {
 	int[] range(int leftKey, int rightKey, boolean leftIncluded, boolean rightIncluded){
 		int i=binarySearch(leftKey, 0, unsorted.length - 1);
 		int []range=new int[chunksize];
-		while(i==-1 ) {
+		while(i==-1) {
 			leftIncluded=true;
 			leftKey++;
 			i = binarySearch(leftKey, 0, unsorted.length - 1);
@@ -38,12 +38,12 @@ public class quicksort {
 				i++;
 			}
 		}
-		while(i<unsorted.length && unsorted[i]!=rightKey){
+		while(i<unsorted.length && unsorted[i]!=rightKey && unsorted[i]<rightKey){
 			checkChunk(range,e+1);
 			range[e++]=unsorted[i++];
 		}
 		if (rightIncluded){
-			while ( i<unsorted.length && unsorted[i]==rightKey){
+			while ( i<unsorted.length && unsorted[i]==rightKey && unsorted[i]<=rightKey){
 				checkChunk(range,e+1);
 				range[e++]=unsorted[i++];
 			}
